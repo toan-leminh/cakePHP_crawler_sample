@@ -15,7 +15,6 @@
 <!-- Intro Content -->
 <div class="row">
     <div class="col-lg-12">
-        <h4>アマゾン書籍の検索</h4>
         <?= $this->Form->create(null, ['class' => 'form-horizontal'])?>
         <div class="form-group">
             <label class="control-label col-sm-2" for="item_currency">クローラー対象サイト</label>
