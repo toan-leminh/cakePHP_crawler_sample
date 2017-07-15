@@ -49,7 +49,7 @@
 
         <div class="form-group">
             <div class="col-sm-offset-2 col-sm-10 text-center">
-                <button type="submit" class="btn btn-default">検索</button>
+                <button type="submit" class="btn btn-default btn-primary" style="width: 200px">検索</button>
             </div>
         </div>
         <?= $this->Form->end() ?>
