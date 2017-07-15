@@ -8,12 +8,16 @@
     </title>
     <?= $this->Html->meta('icon') ?>
 
-    <?= $this->Html->css('bootstrap.min.css') ?>
-    <?= $this->Html->css('modern-business.css') ?>
-    <link href="/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <?= $this->Html->css('bootstrap.min') ?>
+    <?= $this->Html->css('modern-business') ?>
+    <?= $this->Html->css('dataTables.bootstrap') ?>
+    <link href="<?= $this->Url->build('/font-awesome/css/font-awesome.min.css')?>" rel="stylesheet" type="text/css">
 
-    <?= $this->Html->script('jquery.js') ?>
-    <?= $this->Html->script('bootstrap.min.js') ?>
+    <?= $this->Html->script('jquery.min') ?>
+    <?= $this->Html->script('bootstrap.min') ?>
+    <?= $this->Html->script('jquery.dataTables.min') ?>
+    <?= $this->Html->script('dataTables.bootstrap.min') ?>
+    <?= $this->Html->script('common') ?>
 
 
     <?= $this->fetch('meta') ?>

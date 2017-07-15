@@ -14,10 +14,6 @@
  */
 namespace App\Controller;
 
-use Cake\Core\Configure;
-use Cake\Network\Exception\ForbiddenException;
-use Cake\Network\Exception\NotFoundException;
-use Cake\View\Exception\MissingTemplateException;
 use PHPHtmlParser\Dom;
 
 /**
@@ -40,24 +36,42 @@ class SampleController extends AppController
      */
     public function index()
     {
-        $amazonUrl = "https://www.amazon.co.jp/gp/search/ref=sr_adv_b/?page_nav_name=本・コミック・雑誌&__mk_ja_JP=カタカナ&unfiltered=1&search-alias=stripbooks&node=&field-title=__title__&field-author=__author__&field-keywords=&field-isbn=__isbn__&field-publisher=&x-genre=&field-binding_browse-bin=&x-age=&field-dateyear=2020&field-datemod=0&field-dateop=before&field-price=&field-pct-off=&emi=&sort=relevance-rank&Adv-Srch-Books-Submit.x=31&Adv-Srch-Books-Submit.y=5";
+        $bookList = [];
+        $amazonUrl = "https://www.amazon.co.jp/gp/search/ref=sr_adv_b/?";
         if($this->request->is(['post', 'put'])){
             $dom = new Dom();
             $data = $this->request->data();
 
-            $url = str_replace('__title__', $data['title'], $amazonUrl);
-            $url = str_replace('__isbn__', $data['isbn'], $url);
-            $url = str_replace('__author__', $data['author'], $url);
+            $queryData = [
+                'field-isbn' => $data['isbn'],
+                'field-title' => $data['title'],
+                'field-author' => $data['author'],
+                'search-alias' => 'stripbooks',
+                'field-dateyear' => '2020'
+            ];
 
-            debug($url);
+            $amazonUrl .= http_build_query($queryData);
 
-            $dom->loadFromUrl($url);
-
-            $contents = $dom->find('.s-result-list');
+            $dom->load($amazonUrl);
+            $contents = $dom->find('.s-result-item');
             foreach ($contents as $content){
-                $html = $content->find('.s-access-title')->innerHtml;
-                print_r($html);
+                $book = [];
+                $title = $content->find('.s-access-title');
+                if($title){
+                    $book['title'] = $title[0]->innerHtml;
+                }else{
+                    $book['title'] = '';
+                }
+                $price = $content->find('.a-color-price');
+                if($price){
+                    $book['price'] = trim($price[0]->innerHtml, " ￥ " );
+                }else{
+                    $book['price'] = '';
+                }
+                $book['isbn'] =$content->getAttribute('data-asin');
+                $bookList[] = $book;
             }
         }
+        $this->set(compact('bookList'));
     }
 }
